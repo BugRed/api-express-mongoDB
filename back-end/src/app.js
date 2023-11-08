@@ -1,33 +1,31 @@
 import express from "express";
+import connectionDatabase from "./config/dbConnect.js";
+import book from "./models/Book.js";
+
+const conection = await connectionDatabase();
+
+conection.on("error", (erro) => {
+    console.error("Connection error", erro);
+  });
+  
+  conection.once("open", () => {
+    console.log("Connection database sucefull");
+  });
 
 const app = express();
 app.use(express.json());
-
-let books = [
-    {
-        id: 1,
-        title: "Lord of Rings"
-    },
-    {
-        id: 2,
-        title: "The Hobbito"
-    }
-];
-
-const getAny = (id) =>{
-    return books.filter(book => book.id === Number(id))[0];
-};
 
 app.get('/', (req, res) => {
     res.status(200).send("Route acess now!")
 });
 
-app.get('/books', (req, res) => {
-    res.status(200).json(books);
+app.get('/books', async (req, res) => {
+    const bookList = await book.find({});
+    res.status(200).json(bookList);
 });
 
-app.get('/books/:id', (req, res) => {
-    const book = getAny(req.params.id);
+app.get('/books/:id', async (req, res) => {
+    const newBook = await book.findById(req.params.id);
     res.status(200).send(book);
 });
 
@@ -51,3 +49,4 @@ app.delete('/books/:id', (req, res) => {
 
 
 export default app;
+
