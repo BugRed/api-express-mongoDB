@@ -5,7 +5,7 @@ class BookController {
 
     static async listBooks(req, res) {
         try {
-            const bookList = await book.find({});
+            const bookList = await book.find({}).populate("author").exec();
             res.status(200).json(bookList);
         } catch (erro) {
             res.status(500).json({ message: `${erro.message} - Request failed` })
