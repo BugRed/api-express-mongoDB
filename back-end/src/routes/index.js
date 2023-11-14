@@ -1,11 +1,17 @@
-import express from 'express';
-import books from './booksRoutes.js'
-import author from './authorsRoutes.js'
+import express from "express";
+import livros from "./livrosRoutes.js";
+import autores from "./autoresRoutes.js";
 
-const routes = (app) =>{
-    app.route('/').get((req, res) => res.status(200).send('Route conect successefully!'));
-    app.use(express.json(), books, author);
-    
+const routes = (app) => {
+  app.route("/").get((req, res) => {
+    res.status(200).send({titulo: "Curso de node"});
+  });
+
+  app.use(
+    express.json(),
+    livros,
+    autores
+  );
 };
 
 export default routes;
